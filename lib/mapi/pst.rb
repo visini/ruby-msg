@@ -1122,7 +1122,7 @@ class Pst
 					if type == PT_STRING8
 						value = value.read
 					elsif type == PT_UNICODE
-						value = Ole::Types::FROM_UTF16.iconv value.read
+						value = Ole::Types::Lpwstr.load value.read
 					end
 				end
 				# special subject handling

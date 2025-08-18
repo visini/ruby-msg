@@ -100,7 +100,7 @@ module Mapi
 			# change these to use mapi symbolic const names
 			ENCODINGS = {
 				0x000d =>   proc { |obj| obj }, # seems to be used when its going to be a directory instead of a file. eg nested ole. 3701 usually. in which case we shouldn't get here right?
-				0x001f =>   proc { |obj| Ole::Types::FROM_UTF16.iconv obj.read }, # unicode
+				0x001f =>   proc { |obj| Ole::Types::Lpwstr.load obj.read }, # unicode
 				# ascii
 				# FIXME hack did a[0..-2] before, seems right sometimes, but for some others it chopped the text. chomp
 				0x001e =>   proc { |obj| obj.read.chomp 0.chr },
@@ -198,7 +198,7 @@ module Mapi
 					prop = if named
 						str_off = str.unpack('V').first
 						len = names_data[str_off, 4].unpack('V').first
-						Ole::Types::FROM_UTF16.iconv names_data[str_off + 4, len]
+						Ole::Types::Lpwstr.load names_data[str_off + 4, len]
 					else
 						a, b = str.unpack('v2')
 						Log.debug "b not 0" if b != 0
